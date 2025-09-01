@@ -1,0 +1,12 @@
+{
+  "name": "Code Style Rules",
+  "description": "Code formatting and naming conventions",
+  "rules": [
+    "Use camelCase for variables and functions; PascalCase for React components.",
+    "Folder structure: /components, /features, /hooks, /utils, /tests.",
+    "Align with ESLint and Prettier configs; Cursor output must follow project style.",
+    "Prefer early returns and readable, concise functions.",
+    "Keep line length <120 characters when possible.",
+    "Add JSDoc or TSDoc comments for complex functions and hooks."
+  ]
+}

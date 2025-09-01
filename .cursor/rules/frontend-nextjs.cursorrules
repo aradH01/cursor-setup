@@ -1,0 +1,38 @@
+{
+  "name": "Frontend Next.js Rules",
+  "description": "Rules for writing Next.js 15 + React 19 frontend code with Tailwind and Vercel AI",
+  "rules": [
+        "Do not create or reference a src/ folder. This project does not use src/.",
+    "The root app/ folder is the main source folder.",
+    "Inside app/, the following subfolders exist and must always be used:",
+    "- (pages) → Next.js App Router pages.",
+    "- _api → API client functions and API-related utilities.",
+    "- _components → shared and UI components.",
+    "- _constants → constant values such as enums, config values, tokens.",
+    "- _hooks → custom React hooks.",
+    "- _layouts → layout wrappers for pages or sections.",
+    "- _providers → React context providers and global wrappers.",
+    "- _stores → state management (Zustand, Redux, etc).",
+    "- _styles → global styles or Tailwind config extensions.",
+    "- _types → TypeScript types and interfaces.",
+    "- _validations → validation schemas (e.g. Zod, Yup).",
+    "When generating new files, always place them in the correct subfolder instead of creating new ones.",
+    "When updating or searching for existing files, always look inside app/ and its subfolders."
+    "Use functional React components only; class components are forbidden.",
+    "Use Next.js App Router (app/) instead of pages/ router.",
+    "Server Components by default; Client Components only when interactivity is required.",
+    "All components must use TypeScript props/interfaces.",
+    "Place reusable components in /src/components/ui; feature-specific components go in /src/features/<feature>/components.",
+    "Use Tailwind CSS exclusively for styling; no inline styles, CSS modules, or SCSS.",
+    "Use next/image for images and next/link for navigation.",
+    "Keep components <300 lines; split complex components into smaller hooks or child components.",
+    "Use Vercel AI SDK following official guidance for AI integration."
+    "Whenever you create a new React component in _components/, you must also generate a matching Jest test file in the same folder.",
+    "Test file naming convention: ComponentName.test.tsx (for React components).",
+    "For hooks inside _hooks/, always generate a test file HookName.test.ts.",
+    "For stores inside _stores/, always generate a test file StoreName.test.ts.",
+    "For utils inside _utils/, always generate a test file utilName.test.ts.",
+    "Tests must use Jest + React Testing Library, and follow AAA pattern (Arrange, Act, Assert).",
+    "Always include minimal snapshot + functional tests by default."
+  ]
+}

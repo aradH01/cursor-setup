@@ -1,0 +1,13 @@
+{
+  "name": "Playwright API Testing Rules",
+  "description": "Rules for API testing using Playwright + pw-api-plugin",
+  "rules": [
+    "Use pw-api-plugin for API requests and response validation.",
+    "Group tests by endpoint using test.describe.",
+    "Validate status codes and response bodies.",
+    "Include tests for both success and error conditions.",
+    "Optionally validate response schema using zod.",
+    "Ensure tests are deterministic and independent.",
+    "Provide descriptive names for each API test."
+  ]
+}

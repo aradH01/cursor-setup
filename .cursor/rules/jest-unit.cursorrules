@@ -1,0 +1,13 @@
+{
+  "name": "Jest Unit Testing Rules",
+  "description": "Rules for writing unit tests using Jest",
+  "rules": [
+    "All components and hooks must have unit tests.",
+    "Test files must use the naming convention <Component>.test.tsx or <hook>.test.ts.",
+    "Mock external dependencies only when necessary.",
+    "Aim for 80%+ code coverage for critical logic.",
+    "Use descriptive test names with test() or it() to explain behavior.",
+    "Snapshots can be used for UI components but review changes carefully.",
+    "Organize tests in /src/tests or colocate with components."
+  ]
+}
