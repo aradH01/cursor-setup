@@ -6,8 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
-    "test": "jest",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "jest --ci",
+    "e2e": "playwright test",
     "test:watch": "jest --watch"
   },
   "dependencies": {
