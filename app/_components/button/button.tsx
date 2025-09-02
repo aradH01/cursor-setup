@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonHTMLAttributes, ReactNode } from 'react'
-import { cn } from '../../_lib/utils'
+import { cn } from '@lib/utils'
 
 export type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
 export type ButtonSize = 'default' | 'sm' | 'lg' | 'icon'
@@ -28,7 +28,7 @@ const getSizeClasses = (size: ButtonSize): string => {
   return sizes[size]
 }
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode
   variant?: ButtonVariant
   size?: ButtonSize
@@ -84,4 +84,4 @@ export function Button({
   )
 }
 
-export default Button
+

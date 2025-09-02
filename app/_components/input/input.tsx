@@ -1,7 +1,7 @@
 'use client'
 
 import { InputHTMLAttributes, forwardRef, ReactNode } from 'react'
-import { cn } from '../../_lib/utils'
+import { cn } from '@lib/utils'
 
 export type InputVariant = 'default' | 'error' | 'success' | 'ghost'
 export type InputSize = 'default' | 'sm' | 'lg'
@@ -25,7 +25,7 @@ const getSizeClasses = (size: InputSize): string => {
   return sizes[size]
 }
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   variant?: InputVariant
   size?: InputSize
   label?: string
@@ -135,4 +135,3 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
 
 Input.displayName = 'Input'
 
-export default Input
