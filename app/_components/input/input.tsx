@@ -1,7 +1,7 @@
 'use client'
 
 import { InputHTMLAttributes, forwardRef, ReactNode } from 'react'
-import { cn } from '../_lib/utils'
+import { cn } from '../../_lib/utils'
 
 export type InputVariant = 'default' | 'error' | 'success' | 'ghost'
 export type InputSize = 'default' | 'sm' | 'lg'

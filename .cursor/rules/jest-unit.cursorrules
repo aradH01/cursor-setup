@@ -8,6 +8,11 @@
     "Aim for 80%+ code coverage for critical logic.",
     "Use descriptive test names with test() or it() to explain behavior.",
     "Snapshots can be used for UI components but review changes carefully.",
-    "Organize tests in /src/tests or colocate with components."
+    "Organize tests in /src/tests or colocate with components.",
+     "All test files must follow the Arrange, Act, Assert pattern.",
+    "Every test must include at least one meaningful assertion.",
+    "For React components, include both snapshot tests and at least one interaction test using React Testing Library.",
+    "For hooks, include at least one test verifying state change or returned values.",
+    "Never generate empty test files."
   ]
 }

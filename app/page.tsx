@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Button } from "./_components/Button";
-import { Input } from "./_components/Input";
+import { Button } from "./_components/button";
+import { Input } from "./_components/input";
 
 export default function Home() {
   return (

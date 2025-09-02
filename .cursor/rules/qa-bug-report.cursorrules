@@ -9,6 +9,12 @@
     "Assign severity: Critical, High, Medium, Low, Trivial.",
     "Attach screenshots, videos, or logs if applicable.",
     "Include additional notes or possible fixes when relevant.",
-    "One issue per bug report only."
+    "One issue per bug report only.",
+     "Bug reports must follow template: Steps to Reproduce, Expected Result, Actual Result, Screenshots/Logs.",
+    "Always assign severity and priority.",
+    "Link to related test cases if available.",
+    "Never mix bug report content with feature requests.",
+    "Always mention new test files generated in the PR description.",
+    "Never allow merging without at least one reviewer approval."
   ]
 }

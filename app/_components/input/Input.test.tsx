@@ -3,7 +3,7 @@
 
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Input } from './Input'
+import { Input } from './input'
 
 // Helper component for testing with icons
 const TestIcon = () => <span data-testid="test-icon">Icon</span>

@@ -7,6 +7,10 @@
     "Test user flows: login, navigation, form submissions, and critical paths.",
     "Tests should be deterministic and isolated; do not rely on previous test state.",
     "Include setup and teardown when necessary (beforeAll, afterAll).",
-    "E2E tests must run in CI/CD and pass before merging PRs."
+    "E2E tests must run in CI/CD and pass before merging PRs.",
+     "E2E tests must reflect real user flows and avoid flaky waits.",
+    "API tests must validate both success and failure states.",
+    "Always link test cases to Xray/TestRail IDs if available.",
+    "Never duplicate Cypress and Playwright tests for the same case unless explicitly asked."
   ]
 }
