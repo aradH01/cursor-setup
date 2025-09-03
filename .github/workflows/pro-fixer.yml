@@ -87,4 +87,3 @@ jobs:
            labels: auto-fix
            base: ${{ github.ref_name }}    # <-- force the current branch as base
            signoff: true
-           push-to-fork: false
