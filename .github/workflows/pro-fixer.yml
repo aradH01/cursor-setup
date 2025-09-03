@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,6 +56,11 @@ jobs:
 
       - name: Run ESLint --fix
         run: npx eslint . --fix --ignore-path .gitignore --ignore-pattern ".github/**" || true
+
+      - name: Reset GitHub workflow changes
+        run: |
+          git checkout HEAD -- .github/ || true
+          git clean -fd .github/ || true
 
       - name: Check for changes
         id: git-check
