@@ -41,7 +41,7 @@ jobs:
           else
             echo "manager=npm" >> $GITHUB_OUTPUT
           fi
-          
+
       - name: Setup pnpm
         if: ${{ steps.pm.outputs.manager == 'pnpm' }}
         uses: pnpm/action-setup@v4
@@ -85,3 +85,4 @@ jobs:
           labels: auto-fix
           base: ${{ github.event.workflow_run.head_branch || github.ref_name }}
           signoff: true
+          allow-empty: true
