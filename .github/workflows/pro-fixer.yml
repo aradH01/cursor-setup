@@ -85,5 +85,5 @@ jobs:
             - 🎨 Prettier formatting fixes
             - 🔧 ESLint auto-fixes
           labels: auto-fix
-          base: main
+          base: master
           delete-branch: true
