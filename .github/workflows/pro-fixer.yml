@@ -68,20 +68,19 @@ jobs:
 
       - name: Create Auto-Fix PR
         if: steps.git-check.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: fix/pro-fixer-${{ github.run_id }}
           title: "🤖 Pro Fixer: automated fixes"
           commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
           body: |
-            This PR was opened automatically to fix linting and formatting issues.
+              This PR was opened automatically to fix linting and formatting issues.
 
-            ## Changes
-            - 🎨 Prettier formatting fixes
-            - 🔧 ESLint auto-fixes
+              ## Changes
+              - 🎨 Prettier formatting fixes
+              - 🔧 ESLint auto-fixes
           labels: auto-fix
           base: master
           delete-branch: true
-          push-to-fork: false   # critical to avoid fork detection errors
-          fork-ignore-error: true
+          push-to-fork: false
