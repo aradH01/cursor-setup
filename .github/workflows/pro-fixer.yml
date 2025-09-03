@@ -78,6 +78,7 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
+           token: ${{ secrets.GITHUB_TOKEN }}
            branch: fix/pro-fixer-${{ github.run_id }}
            title: "🤖 Pro Fixer: automated fixes"
            commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
