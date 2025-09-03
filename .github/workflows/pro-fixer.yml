@@ -38,17 +38,18 @@ jobs:
             echo "manager=npm" >> $GITHUB_OUTPUT
           fi
 
+      - name: Setup pnpm
+        if: ${{ steps.pm.outputs.manager == 'pnpm' }}
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: ${{ steps.pm.outputs.manager }}
 
-      - name: Setup pnpm
-        if: ${{ steps.pm.outputs.manager == 'pnpm' }}
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Install dependencies
         run: |
