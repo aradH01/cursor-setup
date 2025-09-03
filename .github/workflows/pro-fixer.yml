@@ -80,8 +80,11 @@ jobs:
           title: "🤖 Pro Fixer: automated fixes"
           commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
           body: |
-             This PR was opened automatically after CI failed.
+            This PR was opened automatically to fix linting and formatting issues.
+            
+            ## Changes
+            - 🎨 Prettier formatting fixes
+            - 🔧 ESLint auto-fixes
           labels: auto-fix
           base: ${{ github.ref_name }}
-          signoff: true
-          push-to-fork: false
+          delete-branch: true
