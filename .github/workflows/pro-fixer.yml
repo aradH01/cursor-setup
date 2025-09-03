@@ -52,10 +52,10 @@ jobs:
           else npm ci; fi
 
       - name: Run Prettier
-        run: npx prettier --write . || true
+        run: npx prettier --write . --ignore-path .gitignore --ignore-pattern ".github/**" || true
 
       - name: Run ESLint --fix
-        run: npx eslint . --fix || true
+        run: npx eslint . --fix --ignore-path .gitignore --ignore-pattern ".github/**" || true
 
       - name: Check for changes
         id: git-check
@@ -68,7 +68,7 @@ jobs:
 
       - name: Create Auto-Fix PR
         if: steps.git-check.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: fix/pro-fixer-${{ github.run_id }}
