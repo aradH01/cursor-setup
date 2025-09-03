@@ -78,11 +78,12 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: fix/pro-fixer-${{ github.run_id }}
-          title: "🤖 Pro Fixer: automated fixes"
-          commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
-          body: |
-            This PR was opened automatically after CI failed.
-          labels: auto-fix
-          base: ${{ github.event.workflow_run.head_branch || github.ref_name }}
-          signoff: true
+           branch: fix/pro-fixer-${{ github.run_id }}
+           title: "🤖 Pro Fixer: automated fixes"
+           commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
+           body: |
+              This PR was opened automatically after CI failed.
+           labels: auto-fix
+           base: ${{ github.ref_name }}    # <-- force the current branch as base
+           signoff: true
+           push-to-fork: false
