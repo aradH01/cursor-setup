@@ -84,3 +84,4 @@ jobs:
           base: master
           delete-branch: true
           push-to-fork: false   # critical to avoid fork detection errors
+          fork-ignore-error: true
