@@ -13,8 +13,6 @@ on:
 jobs:
   autofix:
     runs-on: ubuntu-latest
-
-    # Only run on workflow_run and only if CI failed
     if: |
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion != 'success'
@@ -26,10 +24,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-         fetch-depth: 0
-         ref: |
-            ${{ github.event.workflow_run.head_branch ||
-               (github.event.pull_request.head.ref || github.ref_name) }}
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch || github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Detect package manager
         id: pm
@@ -41,12 +37,6 @@ jobs:
           else
             echo "manager=npm" >> $GITHUB_OUTPUT
           fi
-
-      - name: Setup pnpm
-        if: ${{ steps.pm.outputs.manager == 'pnpm' }}
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -60,10 +50,10 @@ jobs:
         with:
           version: 9
 
-      - name: Install deps
+      - name: Install dependencies
         run: |
-          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then pnpm install --frozen-lockfile; \
-          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then yarn install --frozen-lockfile; \
+          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then pnpm install --frozen-lockfile
+          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then yarn install --frozen-lockfile
           else npm ci; fi
 
       # ---- SAFE AUTO-FIXES ----
@@ -73,8 +63,18 @@ jobs:
       - name: Run ESLint --fix
         run: npx eslint . --fix || true
 
-      # Commit changes if any and open PR
+      # ---- Only create PR if changes exist ----
+      - name: Check for changes
+        id: git-check
+        run: |
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Auto-Fix PR
+        if: steps.git-check.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: fix/pro-fixer-${{ github.run_id }}
@@ -85,4 +85,3 @@ jobs:
           labels: auto-fix
           base: ${{ github.event.workflow_run.head_branch || github.ref_name }}
           signoff: true
-          allow-empty: true
