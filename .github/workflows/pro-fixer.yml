@@ -80,10 +80,10 @@ jobs:
           commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
           body: |
             This PR was opened automatically to fix linting and formatting issues.
-
+            
             ## Changes
             - 🎨 Prettier formatting fixes
             - 🔧 ESLint auto-fixes
           labels: auto-fix
-          base: master
+          base: ${{ github.head_ref || github.ref_name }}
           delete-branch: true
