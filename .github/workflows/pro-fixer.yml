@@ -4,15 +4,20 @@ on:
   workflow_run:
     workflows: ["CI"]
     types: [completed]
-workflow_dispatch: {}
+  workflow_dispatch: {}
   push:
     branches: ["*"]
   pull_request:
     branches: ["*"]
+
 jobs:
   autofix:
-    if: ${{ github.event.workflow_run.conclusion != 'success' }}
     runs-on: ubuntu-latest
+
+    # Only run on workflow_run and only if CI failed
+    if: |
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion != 'success'
 
     permissions:
       contents: write
@@ -22,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: ${{ github.event.workflow_run.head_branch || github.ref_name }}
 
       - name: Detect package manager
         id: pm
@@ -70,5 +75,5 @@ jobs:
           body: |
             This PR was opened automatically after CI failed.
           labels: auto-fix
-          base: ${{ github.event.workflow_run.head_branch }}
+          base: ${{ github.event.workflow_run.head_branch || github.ref_name }}
           signoff: true
