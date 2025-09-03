@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    branches:
+      - "**" # run on any branch
   pull_request:
 
 jobs:
@@ -11,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Detect package manager via lockfiles
+      # Detect package manager
       - name: Detect package manager
         id: pm
         run: |
@@ -23,18 +25,18 @@ jobs:
             echo "manager=npm" >> $GITHUB_OUTPUT
           fi
 
-      # Setup Node with cache (works with npm/yarn/pnpm)
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: ${{ steps.pm.outputs.manager }}
-      # pnpm install if pnpm is used
+
       - name: Setup pnpm
         if: ${{ steps.pm.outputs.manager == 'pnpm' }}
         uses: pnpm/action-setup@v4
         with:
           version: 9
+
       - name: Install deps
         run: |
           if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then pnpm install --frozen-lockfile; \

@@ -7,7 +7,6 @@ on:
 
 jobs:
   autofix:
-    # Run only if CI failed
     if: ${{ github.event.workflow_run.conclusion != 'success' }}
     runs-on: ubuntu-latest
 
@@ -19,8 +18,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch }}
 
-      # Detect package manager
       - name: Detect package manager
         id: pm
         run: |
@@ -51,54 +50,21 @@ jobs:
           else npm ci; fi
 
       # ---- SAFE AUTO-FIXES ----
-      - name: Prettier write
-        run: |
-          if jq -re '.scripts["format:write"]' package.json > /dev/null; then \
-            if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then pnpm run format:write; \
-            elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then yarn format:write; \
-            else npm run format:write; fi \
-          else \
-            npx prettier --write . || true; \
-          fi
+      - name: Run Prettier
+        run: npx prettier --write . || true
 
-      - name: ESLint --fix
-        run: |
-          if [ -f .eslintrc.js ] || [ -f .eslintrc.cjs ] || [ -f .eslintrc.json ]; then \
-            npx eslint . --fix || true; \
-          else \
-            echo "No ESLint config found, skipping fix"; \
-          fi
-
-      # Optional: only if you want Pro Fixer to auto-update failing snapshots
-      - name: Update Jest snapshots (optional)
-        if: ${{ env.AUTO_UPDATE_SNAPSHOTS == 'true' }}
-        env:
-          AUTO_UPDATE_SNAPSHOTS: "false" # flip to "true" when you want it
-        run: |
-          if jq -re '.scripts.test' package.json > /dev/null; then
-            npx jest -u || true
-          else
-            echo "No jest test script, skipping"
-          fi
-
-      # Quick verify after fixes
-      - name: Re-run lint & typecheck quickly
-        run: |
-          if [ -f .eslintrc.js ] || [ -f .eslintrc.cjs ] || [ -f .eslintrc.json ]; then npx eslint . || true; fi
-          if [ -f tsconfig.json ]; then npx tsc -p tsconfig.json --noEmit || true; fi
+      - name: Run ESLint --fix
+        run: npx eslint . --fix || true
 
       # Commit changes if any and open PR
       - name: Create Auto-Fix PR
         uses: peter-evans/create-pull-request@v7
         with:
           branch: fix/pro-fixer-${{ github.run_id }}
-          title: "🤖 Pro Fixer: automated code fixes"
-          commit-message: "🤖 Pro Fixer: apply Prettier + ESLint fixes"
+          title: "🤖 Pro Fixer: automated fixes"
+          commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
           body: |
             This PR was opened automatically after CI failed.
-            Includes:
-            - Prettier --write
-            - ESLint --fix
-            - (optional) Jest snapshot update
           labels: auto-fix
+          base: ${{ github.event.workflow_run.head_branch }}
           signoff: true
