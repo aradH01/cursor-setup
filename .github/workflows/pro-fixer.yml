@@ -68,7 +68,7 @@ jobs:
 
       - name: Create Auto-Fix PR
         if: steps.git-check.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: fix/pro-fixer-${{ github.run_id }}
