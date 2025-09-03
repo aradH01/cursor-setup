@@ -1,4 +1,4 @@
-name: Pro Fixer v2
+name: Pro Fixer v3
 
 on:
   push:
@@ -10,9 +10,7 @@ on:
 jobs:
   autofix:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name != 'workflow_run' ||
-      github.event.workflow_run.conclusion != 'success'
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion != 'success'
 
     permissions:
       contents: write
@@ -53,14 +51,12 @@ jobs:
           elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then yarn install --frozen-lockfile
           else npm ci; fi
 
-      # ---- SAFE AUTO-FIXES ----
       - name: Run Prettier
         run: npx prettier --write . || true
 
       - name: Run ESLint --fix
         run: npx eslint . --fix || true
 
-      # ---- Only create PR if changes exist ----
       - name: Check for changes
         id: git-check
         run: |
@@ -87,5 +83,4 @@ jobs:
           labels: auto-fix
           base: master
           delete-branch: true
-          push-to-fork: false
-          rebase: false   # <--- disable rebasing/cherry-pick
+          push-to-fork: false   # critical to avoid fork detection errors
