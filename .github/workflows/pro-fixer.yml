@@ -1,0 +1,86 @@
+name: Pro Fixer v3
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+  workflow_dispatch: {}
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion != 'success'
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+      - name: Detect package manager
+        id: pm
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+          elif [ -f yarn.lock ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+          else
+            echo "manager=npm" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup pnpm
+        if: ${{ steps.pm.outputs.manager == 'pnpm' }}
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ${{ steps.pm.outputs.manager }}
+
+      - name: Install dependencies
+        run: |
+          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then pnpm install --frozen-lockfile
+          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then yarn install --frozen-lockfile
+          else npm ci; fi
+
+      - name: Run Prettier
+        run: npx prettier --write . --ignore-path .gitignore --ignore-pattern ".github/**" || true
+
+      - name: Run ESLint --fix
+        run: npx eslint . --fix --ignore-path .gitignore --ignore-pattern ".github/**" || true
+
+      - name: Reset GitHub workflow changes
+        run: |
+          git checkout HEAD -- .github/ || true
+          git clean -fd .github/ || true
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Auto-Fix PR
+        if: steps.git-check.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7.0.8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: fix/pro-fixer-${{ github.run_id }}
+          title: "🤖 Pro Fixer: automated fixes"
+          commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
+          body: |
+            This PR was opened automatically to fix linting and formatting issues.
+          labels: auto-fix
+          base: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          delete-branch: true
