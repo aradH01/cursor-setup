@@ -14,11 +14,12 @@ export default function Home() {
           height={38}
           priority
         />
-        
+
         <div className="text-center sm:text-left">
           <h1 className="text-3xl font-bold mb-4">UI Components Demo</h1>
           <p className="text-gray-600 mb-8">
-            Demonstrating custom Button and Input components with various variants and sizes.
+            Demonstrating custom Button and Input components with various
+            variants and sizes.
           </p>
         </div>
 
@@ -62,7 +63,7 @@ export default function Home() {
           {/* Input Component Demo */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Input Component Demo</h2>
-            
+
             {/* Basic input */}
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-gray-700">Basic Input</h3>
@@ -71,8 +72,10 @@ export default function Home() {
 
             {/* With label and help text */}
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-700">With Label & Help Text</h3>
-              <Input 
+              <h3 className="text-sm font-medium text-gray-700">
+                With Label & Help Text
+              </h3>
+              <Input
                 label="Email Address"
                 type="email"
                 placeholder="you@example.com"
@@ -83,7 +86,7 @@ export default function Home() {
             {/* Error state */}
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-gray-700">Error State</h3>
-              <Input 
+              <Input
                 label="Password"
                 type="password"
                 variant="error"
@@ -93,8 +96,10 @@ export default function Home() {
 
             {/* Success state */}
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-700">Success State</h3>
-              <Input 
+              <h3 className="text-sm font-medium text-gray-700">
+                Success State
+              </h3>
+              <Input
                 label="Username"
                 variant="success"
                 success="Username is available!"
@@ -103,7 +108,9 @@ export default function Home() {
 
             {/* Different sizes */}
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-700">Different Sizes</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                Different Sizes
+              </h3>
               <div className="space-y-2">
                 <Input size="sm" placeholder="Small input" />
                 <Input size="default" placeholder="Default input" />
