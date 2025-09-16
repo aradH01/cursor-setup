@@ -2,7 +2,7 @@ export default function Home() {
   // Missing React import - Pro Fixer should add this
   const [count, setCount] = useState(0);
   const unusedVariable = "this should get underscore prefix";
-  
+
   useEffect(() => {
     console.log("Effect running");
   }, []);
@@ -12,9 +12,7 @@ export default function Home() {
       <div>
         <h1>Welcome to Pro Fixer v4 Test</h1>
         <p>Count: {count}</p>
-        <button onClick={() => setCount(c => c + 1)}>
-          Increment
-        </button>
+        <button onClick={() => setCount((c) => c + 1)}>Increment</button>
       </div>
     </div>
   );

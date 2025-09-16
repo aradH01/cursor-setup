@@ -10,7 +10,7 @@ interface SampleProps {
 const SampleComponent = ({ title, count = 0, onUpdate }: SampleProps) => {
   const [localCount, setLocalCount] = useState(count);
   const unusedHelper = "should be prefixed with underscore";
-  
+
   const handleIncrement = useCallback(() => {
     const newCount = localCount + 1;
     setLocalCount(newCount);
@@ -21,7 +21,7 @@ const SampleComponent = ({ title, count = 0, onUpdate }: SampleProps) => {
     <div className="sample-component border p-4 rounded">
       <h3>{title}</h3>
       <p>Current count: {localCount}</p>
-      <button 
+      <button
         onClick={handleIncrement}
         className="bg-blue-500 text-white px-4 py-2 rounded"
       >

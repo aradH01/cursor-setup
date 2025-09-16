@@ -1,1 +1,1 @@
-export { default } from './BrokenComponent';
+export { default } from "./BrokenComponent";
