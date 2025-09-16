@@ -53,7 +53,18 @@ jobs:
 
       - name: Run Prettier
         run: npx prettier --write . --ignore-path .gitignore --ignore-pattern ".github/**" || true
+        
+      - name: TypeScript Check
+        run: npx tsc --noEmit
 
+      - name: Run Unit Tests
+        run: npx jest --ci --passWithNoTests
+
+      - name: Run Playwright E2E Tests
+        run: npx playwright test
+
+      - name: Build Next.js app
+        run: npx next build
       - name: Run ESLint --fix
         run: npx eslint . --fix --ignore-path .gitignore --ignore-pattern ".github/**" || true
 
