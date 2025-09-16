@@ -107,24 +107,6 @@ jobs:
           git checkout HEAD -- .github/ || true
           git clean -fd .github/ || true
 
-      - name: Commit all automated fixes & add report files
-        run: |
-          # add logs and any other artifacts we want included in PR
-          for f in tsc-output.txt jest-output.txt playwright-output.txt next-build-output.txt; do
-            [ -f "$f" ] || touch "$f"
-            git add "$f"
-          done
-
-          # add a generated short report (created next step)
-          git add PRO-FIXER-REPORT.md || true
-
-          git add -A
-          if git diff --staged --quiet; then
-            echo "no automated changes to commit"
-          else
-            git commit -m "🤖 Pro Fixer: automated fixes and reports" || true
-          fi
-
       - name: Create PRO-FIXER-REPORT.md
         run: |
           echo "# Pro Fixer Report" > PRO-FIXER-REPORT.md
@@ -159,6 +141,25 @@ jobs:
           else
             git commit -m "🤖 Pro Fixer: add report" || true
           fi
+          
+      - name: Commit all automated fixes & add report files
+        run: |
+          # add logs and any other artifacts we want included in PR
+          for f in tsc-output.txt jest-output.txt playwright-output.txt next-build-output.txt; do
+            [ -f "$f" ] || touch "$f"
+            git add "$f"
+          done
+
+          # add a generated short report (created next step)
+          git add PRO-FIXER-REPORT.md || true
+
+          git add -A
+          if git diff --staged --quiet; then
+            echo "no automated changes to commit"
+          else
+            git commit -m "🤖 Pro Fixer: automated fixes and reports" || true
+          fi
+
 
       - name: Check for changes
         id: git-check
