@@ -1,4 +1,4 @@
-name: Pro Fixer v3
+name: Pro Fixer v4
 
 on:
   push:
@@ -10,14 +10,14 @@ on:
 jobs:
   autofix:
     runs-on: ubuntu-latest
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion != 'success'
 
     permissions:
       contents: write
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
@@ -51,27 +51,114 @@ jobs:
           elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then yarn install --frozen-lockfile
           else npm ci; fi
 
-      - name: Run Prettier
+      - name: Git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # ---- first round of auto-fixes (must-run before type/test checks) ----
+      - name: Run Prettier (auto-fix)
         run: npx prettier --write . --ignore-path .gitignore --ignore-pattern ".github/**" || true
-        
-      - name: TypeScript Check
-        run: npx tsc --noEmit
 
-      - name: Run Unit Tests
-        run: npx jest --ci --passWithNoTests
+      - name: Run ESLint --fix (auto-fix)
+        run: npx eslint . --fix --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --ignore-pattern ".github/**" || true
 
-      - name: Run Playwright E2E Tests
-        run: npx playwright test
-
-      - name: Build Next.js app
-        run: npx next build
-      - name: Run ESLint --fix
-        run: npx eslint . --fix --ignore-path .gitignore --ignore-pattern ".github/**" || true
-
-      - name: Reset GitHub workflow changes
+      - name: Prevent workflow file changes from being committed
         run: |
           git checkout HEAD -- .github/ || true
           git clean -fd .github/ || true
+
+      - name: Commit style fixes (if any)
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "no style changes to commit"
+          else
+            git commit -m "🤖 Pro Fixer: style fixes (Prettier + ESLint)" || true
+          fi
+
+      # ---- run checks but do NOT stop the job (we capture outputs) ----
+      - name: TypeScript Check (capture output)
+        run: |
+          set -o pipefail
+          npx tsc --noEmit 2>&1 | tee tsc-output.txt || true
+
+      - name: Run Unit Tests (capture output)
+        run: |
+          npx jest --ci --passWithNoTests 2>&1 | tee jest-output.txt || true
+
+      - name: Run Playwright E2E Tests (capture output)
+        run: |
+          npx playwright test 2>&1 | tee playwright-output.txt || true
+
+      - name: Build Next.js app (capture output)
+        run: |
+          npx next build 2>&1 | tee next-build-output.txt || true
+
+      # ---- second round of fixers (in case tests/build produced fixable changes) ----
+      - name: Run Prettier again (post-check)
+        run: npx prettier --write . --ignore-path .gitignore --ignore-pattern ".github/**" || true
+
+      - name: Run ESLint --fix again (post-check)
+        run: npx eslint . --fix --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --ignore-pattern ".github/**" || true
+
+      - name: Prevent workflow file changes from being committed (again)
+        run: |
+          git checkout HEAD -- .github/ || true
+          git clean -fd .github/ || true
+
+      - name: Commit all automated fixes & add report files
+        run: |
+          # add logs and any other artifacts we want included in PR
+          for f in tsc-output.txt jest-output.txt playwright-output.txt next-build-output.txt; do
+            [ -f "$f" ] || touch "$f"
+            git add "$f"
+          done
+
+          # add a generated short report (created next step)
+          git add PRO-FIXER-REPORT.md || true
+
+          git add -A
+          if git diff --staged --quiet; then
+            echo "no automated changes to commit"
+          else
+            git commit -m "🤖 Pro Fixer: automated fixes and reports" || true
+          fi
+
+      - name: Create PRO-FIXER-REPORT.md
+        run: |
+          echo "# Pro Fixer Report" > PRO-FIXER-REPORT.md
+          echo "" >> PRO-FIXER-REPORT.md
+          if [ -s tsc-output.txt ]; then
+            echo "## TypeScript check output" >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+            tail -n 200 tsc-output.txt >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+          fi
+          if [ -s jest-output.txt ]; then
+            echo "## Jest output (last 200 lines)" >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+            tail -n 200 jest-output.txt >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+          fi
+          if [ -s playwright-output.txt ]; then
+            echo "## Playwright output (last 200 lines)" >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+            tail -n 200 playwright-output.txt >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+          fi
+          if [ -s next-build-output.txt ]; then
+            echo "## Next build output (last 200 lines)" >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+            tail -n 200 next-build-output.txt >> PRO-FIXER-REPORT.md
+            echo '```' >> PRO-FIXER-REPORT.md
+          fi
+          git add PRO-FIXER-REPORT.md || true
+          if git diff --staged --quiet; then
+            echo "no additional report changes"
+          else
+            git commit -m "🤖 Pro Fixer: add report" || true
+          fi
 
       - name: Check for changes
         id: git-check
@@ -89,9 +176,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: fix/pro-fixer-${{ github.run_id }}
           title: "🤖 Pro Fixer: automated fixes"
-          commit-message: "🤖 Pro Fixer: Prettier + ESLint fixes"
+          commit-message: "🤖 Pro Fixer: automated fixes and reports"
           body: |
-            This PR was opened automatically to fix linting and formatting issues.
+            This PR contains automated fixes applied by Pro Fixer (Prettier + ESLint + other automated edits).
+            See `PRO-FIXER-REPORT.md` in this PR for TypeScript/Jest/Playwright/Next build logs (last 200 lines each).
           labels: auto-fix
           base: ${{ github.event.pull_request.head.ref || github.ref_name }}
           delete-branch: true
+
+      - name: Done
+        run: echo "Pro Fixer finished"
