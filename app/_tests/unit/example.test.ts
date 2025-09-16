@@ -11,4 +11,3 @@ test("component test with broken imports", () => {
   render(<TestComponent title="test" onClick={() => {}} />);
   expect(screen.getByText("test")).toBeInTheDocument();
 });
-  

@@ -1,4 +1,3 @@
-
 export default function Home() {
   // Missing React import - Pro Fixer should add this
   const [count, setCount] = useState(0);
