@@ -12,7 +12,10 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "jest --ci",
     "e2e": "playwright test",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "fix:ts": "node scripts/advanced-typescript-fixer.js",
+    "fix:test": "node scripts/test-auto-fixer.js",
+    "fix:all": "npm run format:write && npm run lint --fix && npm run fix:ts && npm run fix:test"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
