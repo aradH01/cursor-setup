@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`TestComponent matches snapshot 1`] = `
+<div
+  class="test-component"
+>
+  <h2>
+    Snapshot Test
+  </h2>
+  <button>
+    Click me
+  </button>
+</div>
+`;
+
+exports[`TestComponent matches snapshot with children 1`] = `
+<div
+  class="test-component"
+>
+  <h2>
+    Snapshot Test
+  </h2>
+  <button>
+    Click me
+  </button>
+  <span>
+    Child element
+  </span>
+</div>
+`;

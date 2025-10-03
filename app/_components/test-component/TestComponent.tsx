@@ -1,15 +1,14 @@
-// Missing React import - should be auto-fixed
-// Missing proper type annotations - should be flagged
+"use client";
+
+import React, { type ReactNode } from "react";
 
 export interface TestProps {
   title: string;
   onClick: () => void;
-  children?: ReactNode; // Missing ReactNode import
+  children?: ReactNode;
 }
 
 const TestComponent = ({ title, onClick, children }: TestProps) => {
-  const unusedProps = "should get underscore"; // Unused variable
-
   return (
     <div className="test-component">
       <h2>{title}</h2>

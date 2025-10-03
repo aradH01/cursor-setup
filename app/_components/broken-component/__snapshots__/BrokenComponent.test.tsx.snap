@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`BrokenComponent matches snapshot in closed state 1`] = `
+<div
+  class="broken-component"
+>
+  <button>
+    Toggle: 
+    Closed
+  </button>
+  <span />
+</div>
+`;
+
+exports[`BrokenComponent matches snapshot in open state 1`] = `
+<div
+  class="broken-component open"
+>
+  <button>
+    Toggle: 
+    Open
+  </button>
+  <span />
+</div>
+`;
+
+exports[`BrokenComponent matches snapshot with custom className 1`] = `
+<div
+  class="broken-component custom-class"
+>
+  <button>
+    Toggle: 
+    Closed
+  </button>
+  <span />
+</div>
+`;
