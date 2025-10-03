@@ -1,4 +1,6 @@
-// Another component with TypeScript issues
+"use client";
+
+import React, { useState, useCallback } from "react";
 
 interface SampleProps {
   title: string;
@@ -6,16 +8,14 @@ interface SampleProps {
   onUpdate: (newCount: number) => void;
 }
 
-// Missing React import and useState
 const SampleComponent = ({ title, count = 0, onUpdate }: SampleProps) => {
   const [localCount, setLocalCount] = useState(count);
-  const unusedHelper = "should be prefixed with underscore";
 
   const handleIncrement = useCallback(() => {
     const newCount = localCount + 1;
     setLocalCount(newCount);
     onUpdate(newCount);
-  }, [localCount, onUpdate]); // Missing useCallback import
+  }, [localCount, onUpdate]);
 
   return (
     <div className="sample-component border p-4 rounded">

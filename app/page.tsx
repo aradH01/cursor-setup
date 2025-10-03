@@ -1,7 +1,9 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+
 export default function Home() {
-  // Missing React import - Pro Fixer should add this
   const [count, setCount] = useState(0);
-  const unusedVariable = "this should get underscore prefix";
 
   useEffect(() => {
     console.log("Effect running");

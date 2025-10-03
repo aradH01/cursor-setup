@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`SampleComponent matches snapshot with custom count 1`] = `
+<div
+  class="sample-component border p-4 rounded"
+>
+  <h3>
+    Test Sample Component
+  </h3>
+  <p>
+    Current count: 
+    42
+  </p>
+  <button
+    class="bg-blue-500 text-white px-4 py-2 rounded"
+  >
+    Increment
+  </button>
+</div>
+`;
+
+exports[`SampleComponent matches snapshot with default props 1`] = `
+<div
+  class="sample-component border p-4 rounded"
+>
+  <h3>
+    Test Sample Component
+  </h3>
+  <p>
+    Current count: 
+    0
+  </p>
+  <button
+    class="bg-blue-500 text-white px-4 py-2 rounded"
+  >
+    Increment
+  </button>
+</div>
+`;
+
+exports[`SampleComponent matches snapshot with long title 1`] = `
+<div
+  class="sample-component border p-4 rounded"
+>
+  <h3>
+    This is a very long title for the sample component to test text wrapping
+  </h3>
+  <p>
+    Current count: 
+    0
+  </p>
+  <button
+    class="bg-blue-500 text-white px-4 py-2 rounded"
+  >
+    Increment
+  </button>
+</div>
+`;

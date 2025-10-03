@@ -1,26 +1,26 @@
-// Multiple TypeScript errors for Pro Fixer to handle
+"use client";
 
-// Missing React import
-const BrokenComponent = (props) => {
-  // Missing type annotation
-  const [isOpen, setIsOpen] = useState(false); // Missing useState import
-  const [data, setData] = useState<string>("");
-  const unusedRef = useRef(null); // Missing useRef import + unused variable
+import React, { useState, useCallback, type FC } from "react";
+import { cn } from "../../_lib/utils";
 
-  // Missing useCallback import
+interface BrokenComponentProps {
+  className?: string;
+}
+
+const BrokenComponent = ({ className }: BrokenComponentProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [data] = useState<string>("");
+
   const handleClick = useCallback(() => {
     setIsOpen(!isOpen);
   }, [isOpen]);
 
-  // Missing FC type
   const ChildComponent: FC<{ text: string }> = ({ text }) => (
     <span>{text}</span>
   );
 
   return (
-    <div className={cn("broken-component", { open: isOpen })}>
-      {" "}
-      {/* Missing cn import */}
+    <div className={cn("broken-component", { open: isOpen }, className)}>
       <button onClick={handleClick}>
         Toggle: {isOpen ? "Open" : "Closed"}
       </button>

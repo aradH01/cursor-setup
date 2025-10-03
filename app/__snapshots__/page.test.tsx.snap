@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Home Page matches snapshot after incrementing 1`] = `
+<div
+  class="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"
+>
+  <div>
+    <h1>
+      Welcome to Pro Fixer v4 Test
+    </h1>
+    <p>
+      Count: 
+      1
+    </p>
+    <button>
+      Increment
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Home Page matches snapshot on initial render 1`] = `
+<div
+  class="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"
+>
+  <div>
+    <h1>
+      Welcome to Pro Fixer v4 Test
+    </h1>
+    <p>
+      Count: 
+      0
+    </p>
+    <button>
+      Increment
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Home Page matches snapshot with higher count 1`] = `
+<div
+  class="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"
+>
+  <div>
+    <h1>
+      Welcome to Pro Fixer v4 Test
+    </h1>
+    <p>
+      Count: 
+      10
+    </p>
+    <button>
+      Increment
+    </button>
+  </div>
+</div>
+`;
